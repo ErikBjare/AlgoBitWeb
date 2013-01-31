@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<svg width="48" height="48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata id="metadata2493">image/svg+xmlDenmark FlagVinicius Depizzolvdepizzol@gmail.comDenmark flag dk</metadata>
+ <defs>
+  <linearGradient id="linearGradient5060">
+   <stop id="stop5062" offset="0" stop-color="black"/>
+   <stop stop-opacity="0" id="stop5064" offset="1" stop-color="black"/>
+  </linearGradient>
+  <linearGradient id="linearGradient5048">
+   <stop stop-opacity="0" id="stop5050" offset="0" stop-color="black"/>
+   <stop stop-color="black" offset="0.5" id="stop5056"/>
+   <stop stop-opacity="0" id="stop5052" offset="1" stop-color="black"/>
+  </linearGradient>
+  <linearGradient id="linearGradient3289">
+   <stop id="stop3291" offset="0" stop-color="#ffffff"/>
+   <stop stop-opacity="0.533898" id="stop3293" offset="1" stop-color="#ffffff"/>
+  </linearGradient>
+  <linearGradient y1="1.046281" x1="1.07001" gradientTransform="matrix(3.781761,0,0,1.969706,-2104.846,-856.0366)" x2="1.07001" id="linearGradient3523" xlink:href="#linearGradient5048" y2="1.046281"/>
+  <radialGradient fy="486.64789" fx="605.71429" cy="486.64789" cx="605.71429" gradientTransform="matrix(1,0,0,1,-2,4.1875)" gradientUnits="userSpaceOnUse" id="radialGradient3525" xlink:href="#linearGradient5060" r="117.14286"/>
+  <radialGradient fy="486.64789" fx="605.71429" cy="486.64789" cx="605.71429" gradientTransform="matrix(1,0,0,1,-2,4.1875)" gradientUnits="userSpaceOnUse" id="radialGradient3527" xlink:href="#linearGradient5060" r="117.14286"/>
+  <linearGradient y1="0.425373" x1="0.799158" gradientTransform="matrix(1.285742,0,0,1.285742,-13.28717,-14.93762)" x2="0.478974" id="linearGradient3552" xlink:href="#linearGradient3289" y2="0.425373"/>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <g id="g2612">
+   <g id="g2623">
+    <g id="g3518">
+     <rect transform="matrix(0.0205719 0 0 0.0334323 39.1822 32.4823)" stroke-linecap="round" stroke-miterlimit="4" fill="url(#linearGradient3523)" stroke-dashoffset="0" fill-rule="nonzero" y="62.44426" x="-1608.500615" height="478.35718" width="1826.0504" id="rect6709" opacity="0.402062"/>
+     <path stroke-linecap="round" fill-rule="nonzero" marker-start="none" marker-mid="none" marker-end="none" stroke-miterlimit="4" stroke-dashoffset="0" fill="url(#radialGradient3525)" id="path6711" d="m43.657604,34.5625c0,0 0,15.99168 0,15.99168c2.158165,0.030102 5.217396,-3.582924 5.217396,-7.996868c0,-4.413948 -2.408352,-7.994812 -5.217396,-7.994812z" opacity="0.402062"/>
+     <path marker-start="none" marker-mid="none" marker-end="none" stroke-miterlimit="4" fill-rule="nonzero" stroke-dashoffset="0" stroke-linecap="round" opacity="0.402062" d="m6.092363,34.570633c0,0 0,15.99168 0,15.99168c-2.158169,0.030106 -5.217398,-3.582924 -5.217398,-7.996868c0,-4.413948 2.408353,-7.994812 5.217398,-7.994812z" id="path6713" fill="url(#radialGradient3527)"/>
+    </g>
+   </g>
+  </g>
+ </g>
+ <g display="inline">
+  <title>Layer 1.1</title>
+  <path fill-rule="evenodd" marker-start="none" marker-mid="none" marker-end="none" stroke-miterlimit="4" stroke-dashoffset="0" stroke="#000555" id="path6459" d="m1.56409,8.47316c11.80611,-8.4097 32.968011,2.50014 44.996911,0l0,32.27504c-11.583401,3.863899 -31.631501,-8.1824 -44.996911,0l0,-32.27504z" fill="#000bbb"/>
+ </g>
+ <g display="inline">
+  <title>Blue</title>
+ </g>
+ <g display="inline">
+  <title>Layer 2</title>
+  <path stroke="url(#linearGradient3552)" stroke-width="1.000001" fill="#0000ff" marker-start="none" marker-mid="none" marker-end="none" stroke-miterlimit="4" stroke-dashoffset="0" fill-rule="evenodd" id="path16506" d="m2.4825,8.9831c10.2566,-7.36503 31.289701,2.5002 43.121099,0.64288l-0.0061,30.333221c-8.8871,3.069298 -29.6603,-7.509903 -43.03464,-0.871902l-0.08036,-30.104199z" opacity="0.629213"/>
+  <path fill-rule="nonzero" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="4" stroke-dashoffset="0" id="rect3352" d="m13.0625,5.74778l4,0.062826l0,31.542113l-4,-0.089958l0,-31.51498z" fill="#ffff00"/>
+  <path fill-rule="evenodd" marker-start="none" marker-mid="none" marker-end="none" stroke-miterlimit="4" stroke-dashoffset="0" stroke-width="1" fill="#ffff00" d="m1.99256,22.499981c11.80612,-8.409701 31.97854,2.500189 44.007421,0l0,3.109838c-11.58337,3.86392 -30.642001,-8.182409 -44.007421,0l0,-3.109838z" id="path5109"/>
+ </g>
+</svg>

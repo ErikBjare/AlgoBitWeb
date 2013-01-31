@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+	<head>
+	{% include "head.html" %}
+	{% block head %}
+	{% endblock %}
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="banner box">
+				<h1>Algobit</h1>
+			</div>
+			{% block page %}
+			
+			{% endblock %}
+		</div>
+	</body>
+</html>

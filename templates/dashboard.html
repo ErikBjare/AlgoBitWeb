@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load('visualization', '1', {packages: ['corechart']});
+</script>
+<script type="text/javascript">
+function drawVisualization() {
+	var data = google.visualization.arrayToDataTable([
+		{% for trade in trades %}
+			[{{trade.date}}, {{trade.low}}, {{trade.open}}, {{trade.close}}, {{trade.high}}],
+		{% endfor %}
+		['Mon', 20, 28, 38, 45],
+		['Tue', 31, 38, 55, 66],
+		['Wed', 50, 55, 77, 80],
+		['Thu', 77, 77, 66, 50],
+		['Fri', 68, 66, 22, 15]
+		// Treat first row as data as well.
+	], true);
+
+	var options = {
+		legend:'none',
+		chartArea:{left:"8%",top:"10%",width:"84%",height:"80%"}
+	};
+
+	var chart = new google.visualization.CandlestickChart(document.getElementById('candles'));
+	chart.draw(data, options);
+}
+
+	google.setOnLoadCallback(drawVisualization);
+</script>
+{% endblock %}
+
+{% block page %}
+	<h2 class="box" id="userbarHeader">Navigationbar</h2>
+	<div class="container" id="userbar">
+	 Hello, {{ userData["nick"] }}! <a href="{{ logoutURL }}">Logout</a>
+	 {% if userData["admin"] %}<br><b>You are an admin</b>{% endif %}
+	</div>
+	
+	<h2 class="box">Charts</h2>
+	<div class="container" id="charts">
+		<h3>Kapiton</h3>
+		<div id="candles"></div>
+	</div>
+	<h2 class="box">My Orders</h2>
+	<table id="myorders">
+		<tr>
+			<th>Market</th>
+			<th>Status</th>
+			<th>ID</th>
+			<th style="max-width: 3em">Type</th>
+			<th>Amount</th>
+			<th>Price</th>
+			<th style="width: 14em">Created</th>
+		</tr>
+		{% for myorder in myorders %}
+			{% set keyName = myorder.key().name() %}
+			<tr id="{{ keyName }}">
+				<td>{{ myorder.market }}</td>
+				<td>{{ myorder.status }}</td>
+				<td>{{ keyName }}</td>
+				<td>{{ myorder.otype }}</td>
+				<td>{{ myorder.amount }}</td>
+				<td>{{ myorder.price }}</td>
+				<td>{{ myorder.created }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+  
+	<h2 class="box">Assets</h2>
+	<table id="assets">
+		<tr>
+			<th>Market</th>
+			<th>Amount</th>
+			<th>Currency</th>
+			<th>Orders</th>
+			<th>Created</th>
+		</tr>
+		{% for asset in assets %}
+		<tr>
+			<td>{{ asset.market }}</td>
+			<td>{{ asset.amount }}</td>
+			<td>{{ asset.currency }}</td>
+			<td>
+				{% for orderKey in asset.orders %}
+					{% set orderKeyName = orderKey.name() %}
+					[<a href="#{{ orderKeyName }}">{{ orderKeyName }}</a>]
+				{% endfor %}
+			</td>
+			<td style="width: 14em">{{ asset.created }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+{% endblock %}
