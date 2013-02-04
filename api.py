@@ -6,11 +6,11 @@ Created on Jan 20, 2013
 
 import json
 import logging
+
 import webapp2
 
 from handlers import HandlerJSON
 from models import *
-
 
 class Assets(HandlerJSON):
     def post(self):
@@ -61,29 +61,6 @@ class Assets(HandlerJSON):
             self.render(data={"result": "error"})
 
 
-class Trades(HandlerJSON):
-    def post(self):
-        try:
-            data = json.loads(self.request.body)
-            logging.info(data)
-        
-            
-        
-            trades = data["trades"]
-        
-            for trade in trades:
-                dbTrade = Trade( market=trade["market"], 
-                                 key_name=str(trade["orderID"]), 
-                                 otype=trade["orderType"], 
-                                 amount=trade["amount"],
-                                 price=trade["price"],
-                                 status=trade["status"] )
-            self.render(data={"result": "incomplete_api"})
-        except Exception as e:
-            logging.error(e)
-            self.render(data={"result": "error"})
-
-
 """ Perhaps not to be implemented, perhaps Google Charts API is to be preferred?
 
 class Plots(HandlerJSON):
@@ -92,5 +69,6 @@ class Plots(HandlerJSON):
 """        
 
 app = webapp2.WSGIApplication([('/api/assets', Assets),
-                               ('/api/trades', Trades)],
+                               ('/api/fetch/orderbook', OrderbookFetcher),
+                               ('/api/fetch/trades', TradeFetcher)],
                                debug=True)

@@ -19,9 +19,22 @@ handlers:
 - url: /api/.*
   script: api.app
   
+- url: /fetch/.*
+  script: fetcher.app
+  login: admin
+  
+- url: /admin/.*
+  script: admin.app
+  login: admin
+  
 - url: /.*
   script: pages.app
   
+
+admin_console:
+  pages:
+  - name: Initialize DB
+    url: /admin/dbinit
 
 libraries:
 - name: webapp2
