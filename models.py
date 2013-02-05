@@ -52,7 +52,6 @@ class Order(db.Model):
     otype = db.StringProperty(required=True) # ASK or BID
     amount = db.FloatProperty(required=True)
     price = db.FloatProperty(required=True)
-    currency = db.ReferenceProperty(Currency, required=True)
     
     created = db.DateTimeProperty(auto_now_add = True)
     

@@ -45,7 +45,7 @@ class OrderbookFetcher(Fetcher):
             # Here begins the Order-saving part
             orderKeys = {"asks":[], "bids":[]}
             for lookUpType in ["asks", "bids"]:
-                for entry in data[lookUpType]:
+                for entry in data[lookUpType][:15]:
                     orderStruct = {"market":self.market,
                                    "otype":lookUpType[:-1],
                                    "price":entry[0],
@@ -67,8 +67,10 @@ class TradeFetcher(Fetcher):
                 logging.info("Fetching trades since trade-ID: {}".format(lastTradeKey.name()))
                 url = "https://kapiton.se/api/0/trades/?since={}".format(lastTradeKey.name())
             else:
-                logging.warning("Fetching ALL trades from {}".format(self.market.name))
-                url = "https://kapiton.se/api/0/trades/?since=0"
+                sinceTID = self.request.get("tid")
+                logging.info("Fetching trades since trade-ID: {}".format(sinceTID))
+                #logging.warning("Fetching ALL trades from {}".format(self.market.name))
+                url = "https://kapiton.se/api/0/trades/?since={}".format(sinceTID)
         else:
             logging.error("Unknown market {}, can not fetch trades".format(self.market.name))
             return None
@@ -89,8 +91,7 @@ class TradeFetcher(Fetcher):
                 tradeStruct = {"market":self.market,
                                "price":trade["price"],
                                "amount":trade["amount"],
-                               "executed":datetime.fromtimestamp(trade["date"]), # TODO Fix timezone!
-                               "currency":Currency.get_by_key_name("SEK") }
+                               "executed":datetime.fromtimestamp(trade["date"])}  # TODO Fix timezone!
                 Trade(key_name=str(trade["tid"]), **tradeStruct).put()
 
 app = webapp2.WSGIApplication([('/fetch/orderbook', OrderbookFetcher),
