@@ -2,22 +2,30 @@
 
 {% block head %}
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
 <script type="text/javascript">
-  google.load('visualization', '1', {packages: ['corechart']});
-</script>
-<script type="text/javascript">
+	google.load('visualization', '1', {packages: ['corechart']});
+
   	function drawOrderbook() {
 	    var data = google.visualization.arrayToDataTable([
 	      ['Price', 'Bids', 'Asks', 'History', 'Orders'],
+	      
+	      [{{chartData["orderbook"]["bids"][0].price}}, 0.0, null, null, null],
 	      {% for entry in chartData["orderbook"]["bids"] %}
-	      	[{{entry.price}}, {{entry.accumvolume}}, null, null, 1],
+	      	[{{entry.price}}, {{entry.accumvolume}}, null, null, null],
 	      {% endfor %}
+	      
+	      [{{chartData["orderbook"]["asks"][0].price}}, null, 0.0, null, null],
 	      {% for entry in chartData["orderbook"]["asks"] %}
 	      	[{{entry.price}}, null, {{entry.accumvolume}}, null, null],
 	      {% endfor %}
+	      
+	      [{{chartData["trades"][0].price}}, null, null, 0, null],
 	      {% for trade in chartData["trades"] %}
 			[{{trade.price}}, null, null, {{trade.accumvolume}}, null],
 		  {% endfor %}
+		  
+		  [0, null, null, null, 0],
 		  {% for myorder in myorders %}
 		  	[{{myorder.price}}, null, null, null, {{myorder.amount}}],
 		  {% endfor %}
@@ -62,7 +70,6 @@
 	google.setOnLoadCallback(drawOrderbook);
 	google.setOnLoadCallback(drawTrades);
 </script>
-
 {% endblock %}
 
 {% block page %}
