@@ -68,7 +68,5 @@ class Plots(HandlerJSON):
         data = json.loads(self.request.body)
 """        
 
-app = webapp2.WSGIApplication([('/api/assets', Assets),
-                               ('/api/fetch/orderbook', OrderbookFetcher),
-                               ('/api/fetch/trades', TradeFetcher)],
+app = webapp2.WSGIApplication([('/api/assets', Assets)],
                                debug=True)

@@ -1,7 +1,7 @@
 cron:
 - description: Fetch trades from Kapiton
   url: /fetch/orderbook?m=KapitonSEK
-  schedule: every 6 hours
+  schedule: every 1 hours
 - description: Fetch trades from Kapiton
-  url: "/fetch/trades?m=KapitonSEK&tid=6250"
-  schedule: every 1 hour
+  url: "/fetch/trades?m=KapitonSEK"
+  schedule: every 30 minutes
