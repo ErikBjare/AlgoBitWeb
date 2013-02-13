@@ -33,7 +33,8 @@ class Assets(HandlerJSON):
                         newOrder = existing
                     else:
                         logging.info("Order with ID {0} didn't exists, creating.".format(order["orderID"]))
-                        newOrder = MyOrder( market=order["market"], 
+                        market = Market.gql("WHERE name = :1", order["market"]).get()
+                        newOrder = MyOrder( market=market, 
                                             key_name=str(order["orderID"]), 
                                             otype=order["orderType"], 
                                             amount=order["amount"],
@@ -53,12 +54,14 @@ class Assets(HandlerJSON):
                                       orders=orderKeys )
                     newAsset.put()   
                 
-                self.render(data={"result": "success"})
+                result = "success"
             else:
-                self.render(data={"result": "invalid_auth"})
+                result = "invalid_auth"
         except Exception as e:
             logging.error(e)
-            self.render(data={"result": "error"})
+            result = "error"
+            raise
+        self.render(data={"result": result})
 
 
 """ Perhaps not to be implemented, perhaps Google Charts API is to be preferred?

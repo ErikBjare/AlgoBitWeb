@@ -20,7 +20,7 @@
 	      	[{{entry.price}}, null, {{entry.accumvolume}}, null, null],
 	      {% endfor %}
 	      
-	      [{{chartData["trades"][0].price}}, null, null, 0, null],
+	      [{{chartData["trades"][0].price}}, null, null, 0.0, null],
 	      {% for trade in chartData["trades"] %}
 			[{{trade.price}}, null, null, {{trade.accumvolume}}, null],
 		  {% endfor %}
