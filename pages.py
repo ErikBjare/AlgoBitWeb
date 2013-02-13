@@ -8,6 +8,7 @@ import logging
 
 import webapp2
 from google.appengine.api import users
+from google.appengine.api import memcache
 
 from handlers import HandlerHTML
 from models import *
@@ -45,6 +46,11 @@ class Dashboard(HandlerHTML):
             self.redirect("/login")
             
     def getChartData(self):
+        chartData = memcache.get("chartData")
+        if chartData is not None:
+            logging.debug("chartData found in memcache")
+            return chartData
+        else:
             orderbookQuery = Orderbook.all()
             orderbook = orderbookQuery.order("-created").get()
             if orderbook:
@@ -71,18 +77,40 @@ class Dashboard(HandlerHTML):
             else:
                 logging.error("Couldn't get trades from DB")
             
-            return { "orderbook":entries,
-                     "trades":trades }
+            chartData = { "orderbook":entries, "trades":trades }
+            memcache.add("chartData", chartData, 300)
+            logging.debug("chartData added to memcache")
+            return chartData
             
     def getMyOrders(self):
-        myOrderQuery = MyOrder.all()
-        myOrders = myOrderQuery.order("-created").run(limit=10)
-        return myOrders
+        myOrders = memcache.get("myOrders")
+        if myOrders is not None:
+            logging.debug("myOrders found in memcache")
+            return myOrders
+        else:
+            myOrderQuery = MyOrder.all()
+            myOrdersBatch = myOrderQuery.order("-created").run(limit=10)
+            myOrders = []
+            for myOrder in myOrdersBatch:
+                myOrders.append(myOrder)
+            memcache.add("myOrders", myOrders, 60)
+            logging.debug("myOrders added to memcache")
+            return myOrders
     
     def getAssets(self):
-        assetQuery = Asset.all()
-        assets = assetQuery.order("-created").run(limit=10)
-        return assets
+        assets = memcache.get("assets")
+        if assets is not None:
+            logging.debug("assets found in memcache")
+            return assets
+        else:
+            assetQuery = Asset.all()
+            assetsBatch = assetQuery.order("-created").run(limit=10)
+            assets = []
+            for asset in assetsBatch:
+                assets.append(asset)
+            memcache.add("assets", assets, 60)
+            logging.debug("assets added to memcache")
+            return assets
             
 class Login(HandlerHTML):
     def get(self):
