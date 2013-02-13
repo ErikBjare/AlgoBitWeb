@@ -96,10 +96,10 @@
 			<th>Price</th>
 			<th style="width: 14em">Created</th>
 		</tr>
-		{% for myorder in myorders %}
+		{% for myorder in myOrders %}
 			{% set keyName = myorder.key().name() %}
 			<tr id="{{ keyName }}">
-				<td>{{ myorder.market }}</td>
+				<td>{{ myorder.market.name }}</td>
 				<td>{{ myorder.status }}</td>
 				<td>{{ keyName }}</td>
 				<td>{{ myorder.otype }}</td>
