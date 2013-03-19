@@ -13,6 +13,7 @@ import urllib
 import webapp2
 import jinja2
 from google.appengine.api import users
+from google.appengine.ext import db
 
 from models import User
 
@@ -37,14 +38,19 @@ class HandlerHTML(Handler):
     def render(self, template, **params):
         self.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
         t = jinja_env.get_template(template)
-        self.write(t.render(params))
+        self.write(t.render(params, 
+                            userData=self.userData))
             
     def login(self):
         self.user = users.get_current_user()
         if self.user:
             self.checkUser()
-            self.userData = {"admin":users.is_current_user_admin(), 
-                                 "nick":self.user.nickname() }
+            self.userData = {"user":User.get_by_key_name(self.user.nickname()),
+                             "logoutURL":users.create_logout_url('/'),
+                             "admin":users.is_current_user_admin(), 
+                             "nick":self.user.nickname() }
+        else:
+            self.userData = None
             
     def checkUser(self):
         user = User.get_by_key_name(self.user.nickname())
@@ -63,8 +69,15 @@ class HandlerJSON(Handler):
         
     def authenticate(self, identity, key):
         user = User.get_by_key_name(identity)
+        # Implement: Check that API-key is correct!
         logging.info("Identity: {0}, key: {1}. Found matching user {2} in datastore".format(identity, key, user))
         if user:
+            api_keys = [db.get(key) for key in user.api_keys]
+            for api_key in api_keys:
+                if api_key.host == "AlgoBitWeb":
+                    if api_key.apikey == key:
+                        logging.info("Identity: {0}, key: {1}. Found matching user {2} in datastore".format(identity, key, user))
+                        return True
             return True
         return False
         

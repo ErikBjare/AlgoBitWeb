@@ -1,0 +1,24 @@
+<h2 class="box">Assets</h2>
+<table id="assets">
+	<tr>
+		<th>Market</th>
+		<th>Amount</th>
+		<th>Currency</th>
+		<th>Orders</th>
+		<th>Created</th>
+	</tr>
+	{% for asset in assets %}
+	<tr>
+		<td>{{ asset.market }}</td>
+		<td>{{ asset.amount }}</td>
+		<td>{{ asset.currency }}</td>
+		<td>
+			{% for orderKey in asset.orders %}
+				{% set orderKeyName = orderKey.name() %}
+				[<a href="#{{ orderKeyName }}">{{ orderKeyName }}</a>]
+			{% endfor %}
+		</td>
+		<td style="width: 14em">{{ asset.created }}</td>
+	</tr>
+	{% endfor %}
+</table>

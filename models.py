@@ -30,7 +30,17 @@ class User(db.Model):
     firstname = db.StringProperty()
     lastname = db.StringProperty()
     
-    api_keys = db.StringListProperty()
+    api_keys = db.ListProperty(db.Key)
+    
+class API_Key(db.Model):
+    # What the API-key gives access to
+    host = db.CategoryProperty(required=True)
+    
+    # What level of authority does the key have? ("Read", "Write" etc.)
+    level = db.CategoryProperty(required=True)
+    
+    # The key itself
+    apikey = db.StringProperty(required=True)
     
 class Asset(db.Model):
     market = db.StringProperty(required = True)

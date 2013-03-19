@@ -1,0 +1,5 @@
+<h2 class="box" id="userbarHeader">Navigationbar</h2>
+<div class="container" id="userbar">
+	Hello, <a href="/account">{{ userData["nick"] }}</a>! <a href="{{ userData['logoutURL'] }}">Logout</a>
+	{% if userData["admin"] %}<br><b>You are an admin</b>{% endif %}
+</div>

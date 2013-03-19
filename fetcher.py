@@ -93,6 +93,50 @@ class TradeFetcher(Fetcher):
                                "amount":trade["amount"],
                                "executed":datetime.fromtimestamp(trade["date"])}  # TODO Fix timezone!
                 Trade(key_name=str(trade["tid"]), **tradeStruct).put()
+                
+class OrderStatusChecker(Fetcher):
+    """
+        ToDo:
+         - Update fetcher so that it uses apikey specified in the orders user.apikeys
+         - Make sure that it only queries trades from the current market.
+    """
+    apikey = "c8357855580484d035980d7effbddd6898c7804cb2e78932c155638f"
+    
+    def fetchData(self):
+        if self.market.name == "Kapiton":
+            activeTrades = MyOrder.gql("WHERE status IN ('OPEN', 'PRTF')")
+            if activeTrades: 
+                logging.info("Checking {0} active trades".format(len(activeTrades)))
+                url = "https://kapiton.se/api/0/auth/getorder"
+        else:
+            logging.error("Unknown market {}, can not fetch trades".format(self.market.name))
+            return None
+        updated = []
+        for trade in activeTrades:
+            payload = {"api_key":self.apikey, "id":int(trade.key().name())}
+            logging.info("Looking up trade {}".format(payload["id"]))
+            response = fetch(url, json.loads(payload), method="POST")
+            if response.status_code != 200:            
+                logging.error("Not OK statuscode while trying to look up trade {}".format(payload["id"]))
+            else:
+                if response.content:
+                    responseData = json.loads(response.content)
+                    if responseData["status"] != trade.status:
+                        trade.status = responseData["status"]
+                        updated.append(trade)
+                else:
+                    logging.error("Something went wrong while trying to fetch orderstatus, error: {}".format(response["error"]))
+        return updated
+
+    def saveData(self, data):
+        if self.market.name == "Kapiton":
+            # Here begins the Trade-saving part
+            for trade in data:
+                tradeStruct = {"market":self.market,
+                               "price":trade["price"],
+                               "amount":trade["amount"],
+                               "executed":datetime.fromtimestamp(trade["date"])}  # TODO Fix timezone!
+                Trade(key_name=str(trade["tid"]), **tradeStruct).put()
 
 app = webapp2.WSGIApplication([('/fetch/orderbook', OrderbookFetcher),
                                ('/fetch/trades', TradeFetcher)],

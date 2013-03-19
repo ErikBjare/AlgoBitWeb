@@ -1,0 +1,24 @@
+<h2 class="box">My Orders</h2>
+<table id="myorders">
+	<tr>
+		<th>Market</th>
+		<th>Status</th>
+		<th>ID</th>
+		<th style="max-width: 3em">Type</th>
+		<th>Amount</th>
+		<th>Price</th>
+		<th style="width: 14em">Created</th>
+	</tr>
+	{% for myorder in myOrders %}
+		{% set keyName = myorder.key().name() %}
+		<tr id="{{ keyName }}">
+			<td>{{ myorder.market.name }}</td>
+			<td>{{ myorder.status }}</td>
+			<td>{{ keyName }}</td>
+			<td>{{ myorder.otype }}</td>
+			<td>{{ myorder.amount }}</td>
+			<td>{{ myorder.price }}</td>
+			<td>{{ myorder.created }}</td>
+		</tr>
+	{% endfor %}
+</table>

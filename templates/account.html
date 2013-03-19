@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block page %}
+	{% include "elements/navbar.html" %}
+	
+	<h2 class="box" id="apikeysHeader">API-Keys</h2>
+	<div class="container" id="apikeys">
+		<table style="width: 100%">
+			<tr>
+				<th>Host</th>
+				<th>Level</th>
+				<th>Key</th>
+				<th>Delete</th>
+			</tr>
+			{% for api_key in api_keys %}
+			<tr>
+				<td>{{ api_key.host }}</td>
+				<td>{{ api_key.level }}</td>
+				<td>{{ api_key.apikey }}</td>
+				<td>
+					<a href="/account/delkey?keyid={{ api_key.keyid }}">Delete</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+		
+		<form action="/account/newkey" method="post">
+			Create a new API-key<br>
+			<b>Note:</b> It is recommended that you generate this key using some hashing algorithm.<br>
+			Host <input type="text" name="host"></input><br>
+			Level <input type="text" name="level"></input><br>
+			Key <input type="text" name="key"></input><br>
+			<input value="Create key" type="submit" class="button" style="width: 100px;">
+		</form>
+	</div>
+{% endblock %}

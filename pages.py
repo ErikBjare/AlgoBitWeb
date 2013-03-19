@@ -38,10 +38,8 @@ class Dashboard(HandlerHTML):
             assets = self.getAssets()
             self.render("dashboard.html", 
                         chartData=chartData, 
-                        userData=self.userData, 
                         myOrders=myOrders, 
-                        assets=assets, 
-                        logoutURL=users.create_logout_url('/'))
+                        assets=assets)
         else:
             self.redirect("/login")
             
@@ -123,12 +121,49 @@ class Account(HandlerHTML):
         self.login()
         
         if self.user:
-            self.render("account.html")
+            api_keys = [db.get(key) for key in self.userData["user"].api_keys]
+            logging.info(api_keys)
+            api_keys2 = []
+            for api_key in api_keys:
+                api_key.keyid = api_key.key().id()
+                api_keys2.append(api_key)
+            self.render("account.html", api_keys=api_keys2)
+        else:
+            self.redirect("/login")
+            
+class NewAPIKey(HandlerHTML):
+    def post(self):
+        self.login()
+        
+        if self.user:
+            host = self.request.get("host")
+            level = self.request.get("level")
+            key = self.request.get("key")
+            apikey = API_Key(host=host, level=level, apikey=key).put()
+            self.userData["user"].api_keys.append(apikey)
+            self.userData["user"].put()
+            self.redirect("/account")
+        else:
+            self.redirect("/login")
+            
+class DelAPIKey(HandlerHTML):
+    def get(self):
+        self.login()
+        
+        if self.user:
+            keyid = self.request.get("keyid")
+            apikey = API_Key.get_by_id(int(keyid))
+            self.userData["user"].api_keys.remove(apikey.key())
+            self.userData["user"].put()
+            apikey.delete()
+            self.redirect("/account")
         else:
             self.redirect("/login")
 
 app = webapp2.WSGIApplication([('/', Root),
                                ('/dashboard', Dashboard), 
                                ('/login', Login),
-                               ('/account', Account)],
+                               ('/account', Account),
+                               ('/account/newkey', NewAPIKey),
+                               ('/account/delkey', DelAPIKey)],
                                debug=True)
