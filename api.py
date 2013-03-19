@@ -19,8 +19,6 @@ class Assets(HandlerJSON):
             identity = data["auth"]["identity"]
             key = data["auth"]["key"]
             
-            logging.debug(data)
-            
             if self.authenticate(identity, key):
                 keyDict = {}
                 

@@ -67,17 +67,17 @@ class HandlerJSON(Handler):
         self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
         self.write(json.dumps(data))
         
-    def authenticate(self, identity, key):
+    def authenticate(self, identity, apikey):
         user = User.get_by_key_name(identity)
         # Implement: Check that API-key is correct!
         if user:
             api_keys = [db.get(key) for key in user.api_keys]
             for api_key in api_keys:
                 if api_key.host == "AlgoBitWeb":
-                    if api_key.apikey == key:
-                        logging.info("Identity: {0}, key: {1}. Found matching user {2} in datastore".format(identity, key, user))
+                    if api_key.apikey == apikey:
+                        logging.info("Identity: {0}, apikey: {1}. Found matching user {2} in datastore".format(identity, apikey, user))
                         return True
-        logging.warning("Could not find user: {0} with key: {1}".format(identity, key))
+        logging.warning("Could not find user: {0} with apikey: {1}".format(identity, apikey))
         return False
         
 class HandlerPNG(Handler):
