@@ -70,7 +70,6 @@ class HandlerJSON(Handler):
     def authenticate(self, identity, key):
         user = User.get_by_key_name(identity)
         # Implement: Check that API-key is correct!
-        logging.info("Identity: {0}, key: {1}. Found matching user {2} in datastore".format(identity, key, user))
         if user:
             api_keys = [db.get(key) for key in user.api_keys]
             for api_key in api_keys:
@@ -78,7 +77,7 @@ class HandlerJSON(Handler):
                     if api_key.apikey == key:
                         logging.info("Identity: {0}, key: {1}. Found matching user {2} in datastore".format(identity, key, user))
                         return True
-            return True
+        logging.warning("Could not find user: {0} with key: {1}".format(identity, key))
         return False
         
 class HandlerPNG(Handler):
