@@ -4,4 +4,7 @@ cron:
   schedule: every 1 hours
 - description: Fetch trades from Kapiton
   url: "/fetch/trades?m=KapitonSEK"
-  schedule: every 30 minutes
+  schedule: every 5 minutes
+- description: Fetch trades from Kapiton
+  url: "/fetch/checkorders?m=KapitonSEK"
+  schedule: every 5 minutes

@@ -6,6 +6,7 @@ Created on Feb 04, 2013
 
 import json
 import logging
+import urllib
 from datetime import datetime
 
 import webapp2
@@ -104,26 +105,32 @@ class OrderStatusChecker(Fetcher):
     
     def fetchData(self):
         if self.market.name == "Kapiton":
-            activeTrades = MyOrder.gql("WHERE status IN ('OPEN', 'PRTF')")
-            if activeTrades: 
-                logging.info("Checking {0} active trades".format(len(activeTrades)))
-                url = "https://kapiton.se/api/0/auth/getorder"
+            activeOrders = MyOrder.gql("WHERE status IN ('OPEN', 'PRTF')").fetch(20)
+            if len(activeOrders): 
+                logging.info("Checking {0} active orders".format(len(activeOrders)))
+                url = "http://kapiton.se/api/0/auth/getorder"
+            else:
+                return None
         else:
-            logging.error("Unknown market {}, can not fetch trades".format(self.market.name))
+            logging.error("Unknown market {}, can not check orders".format(self.market.name))
             return None
         updated = []
-        for trade in activeTrades:
-            payload = {"api_key":self.apikey, "id":int(trade.key().name())}
-            logging.info("Looking up trade {}".format(payload["id"]))
-            response = fetch(url, json.loads(payload), method="POST")
+        for order in activeOrders:
+            payload = {"api_key":self.apikey, "id":int(order.key().name())}
+            payloadEncoded = urllib.urlencode(payload).encode("ASCII")
+            logging.info("Looking up order {}".format(payload["id"]))
+            response = fetch(url, 
+                             payloadEncoded, 
+                             method="POST")
             if response.status_code != 200:            
-                logging.error("Not OK statuscode while trying to look up trade {}".format(payload["id"]))
+                logging.error("Not OK statuscode while trying to look up order {}".format(payload["id"]))
+                logging.info(response.content)
             else:
                 if response.content:
                     responseData = json.loads(response.content)
-                    if responseData["status"] != trade.status:
-                        trade.status = responseData["status"]
-                        updated.append(trade)
+                    if responseData["status"] != order.status:
+                        order.status = responseData["status"]
+                        updated.append(order)
                 else:
                     logging.error("Something went wrong while trying to fetch orderstatus, error: {}".format(response["error"]))
         return updated
@@ -132,12 +139,9 @@ class OrderStatusChecker(Fetcher):
         if self.market.name == "Kapiton":
             # Here begins the Trade-saving part
             for trade in data:
-                tradeStruct = {"market":self.market,
-                               "price":trade["price"],
-                               "amount":trade["amount"],
-                               "executed":datetime.fromtimestamp(trade["date"])}  # TODO Fix timezone!
-                Trade(key_name=str(trade["tid"]), **tradeStruct).put()
+                trade.put()
 
 app = webapp2.WSGIApplication([('/fetch/orderbook', OrderbookFetcher),
-                               ('/fetch/trades', TradeFetcher)],
+                               ('/fetch/trades', TradeFetcher),
+                               ('/fetch/checkorders', OrderStatusChecker)],
                                debug=True)

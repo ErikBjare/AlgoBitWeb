@@ -87,7 +87,7 @@ class Dashboard(HandlerHTML):
             return myOrders
         else:
             myOrderQuery = MyOrder.all()
-            myOrdersBatch = myOrderQuery.order("-created").run(limit=10)
+            myOrdersBatch = myOrderQuery.order("-created").filter('status =', "OPEN").run(limit=10)
             myOrders = []
             for myOrder in myOrdersBatch:
                 myOrders.append(myOrder)
@@ -149,6 +149,8 @@ class NewAPIKey(HandlerHTML):
 class DelAPIKey(HandlerHTML):
     def get(self):
         self.login()
+        
+        # ToDo: Should check if user owns API-key before deleting
         
         if self.user:
             keyid = self.request.get("keyid")
